@@ -15,7 +15,7 @@ model Transaction {
   category      TransactionCategory
   paymentMethod TransactionPaymentMethod
   date          DateTime
-  createdAt     DateTime                 @default(now())
+  createdAt     DateTime                 
   updatedAt     DateTime                 @updatedAt
   userId        String
 }
