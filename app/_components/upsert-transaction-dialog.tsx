@@ -255,11 +255,15 @@ const UpsertTransactionDialog = ({
             />
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="rounded-full"
+                >
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">
+              <Button type="submit" className="rounded-full">
                 {isUpdate ? "Atualizar" : "Adicionar"}
               </Button>
             </DialogFooter>
