@@ -123,10 +123,6 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     label: "Saúde",
   },
   {
-    value: "SALARY",
-    label: "Salário",
-  },
-  {
     value: "EDUCATION",
     label: "Educação",
   },
