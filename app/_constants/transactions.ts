@@ -34,7 +34,7 @@ export const TRANSACTIONS_TYPE_OPTIONS = [
   },
   {
     value: TransactionType.DEPOSIT,
-    label: "",
+    label: "Ganho",
   },
   {
     value: TransactionType.INVESTMENT,
