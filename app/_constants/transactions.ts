@@ -30,11 +30,11 @@ export const TRANSACTION_PAYMENT_METHOD_LABELS = {
 export const TRANSACTIONS_TYPE_OPTIONS = [
   {
     value: TransactionType.EXPENSE,
-    label: "Gasto",
+    label: "Despesa",
   },
   {
     value: TransactionType.DEPOSIT,
-    label: "Ganho",
+    label: "",
   },
   {
     value: TransactionType.INVESTMENT,
