@@ -31,8 +31,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface TransactionsPieChartProps {
-  types: TransactionsPercentagePerType;
-  balance: number;
+  typesPercentage: TransactionsPercentagePerType;
   depositsTotal: number;
   investmentsTotal: number;
   expensesTotal: number;
