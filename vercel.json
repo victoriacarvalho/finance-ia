@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "DATABASE_URL": "postgresql://neondb_owner:RBSUAFq2J5Tn@ep-black-hat-a5nnnk9h.us-east-2.aws.neon.tech/neondb?sslmode=require"
+    },
+    "commands": {
+      "prisma-generate": "npx prisma generate"
+    }
+  }
+}
