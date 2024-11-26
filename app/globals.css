@@ -49,7 +49,8 @@ body {
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 95%;
     --primary: 102 59% 44%; /* Adjusted for #55B02E */
-    --primary-foreground: 0 0 100% --secondary: 240 3.7% 15.9%;
+    --primary-foreground: 0 0 100%;
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0 100%;
     --muted: 0 0% 15%;
     --muted-foreground: 240 5% 64.9%;
@@ -82,7 +83,6 @@ body {
 
 /* Responsividade para telas pequenas (celulares) */
 @media (max-width: 640px) {
-  /* Exemplo de ajustes específicos para telas menores */
   body {
     font-size: 14px; /* Ajuste o tamanho da fonte para telas menores */
   }
@@ -100,16 +100,25 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .card {
+    margin: 10px 0; /* Ajuste de margem nos cards */
+  }
 }
 
 /* Responsividade para tablets (telas entre 640px e 768px) */
 @media (min-width: 641px) and (max-width: 768px) {
   .container {
     width: 90%; /* Container ocupa 90% da largura */
+    padding: 15px; /* Padding aumentado para telas médias */
   }
 
   h1 {
     font-size: 1.75rem; /* Tamanho de fonte adequado para tablets */
+  }
+
+  .card {
+    margin: 15px 0; /* Ajuste de margem nos cards */
   }
 }
 
@@ -117,10 +126,14 @@ body {
 @media (min-width: 769px) {
   .container {
     width: 80%; /* Container ocupa 80% da largura */
+    padding: 20px; /* Padding maior em telas grandes */
   }
 
   h1 {
     font-size: 2rem; /* Tamanho de fonte maior para desktops */
   }
-}
 
+  .card {
+    margin: 20px 0; /* Ajuste de margem nos cards */
+  }
+}
