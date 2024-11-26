@@ -17,38 +17,26 @@ const SummaryCard = ({
 }: SummaryCardProps) => {
   return (
     <Card
-      className={`${
-        size === "large" || title === "Investido" ? "bg-white bg-opacity-5" : ""
-      } p-4 rounded-md shadow-lg`}
+      className={`${size === "large" || title === "Investido" ? "bg-white bg-opacity-5" : " "}`}
     >
-      <CardHeader className="flex items-center gap-4">
+      <CardHeader className="flex-row items-center gap-4">
         {icon}
         <p
-          className={`${
-            size === "small"
-              ? "text-muted-foreground text-sm sm:text-base"
-              : "text-white opacity-70 text-lg sm:text-xl"
-          }`}
+          className={`${size === "small" ? "text-muted-foreground" : "text-white opacity-70"}`}
         >
           {title}
         </p>
       </CardHeader>
-      <CardContent className="flex justify-between items-center">
+      <CardContent className="flex justify-between">
         <p
-          className={`font-bold ${
-            size === "small" ? "text-2xl sm:text-3xl" : "text-4xl sm:text-5xl"
-          }`}
+          className={`font-bold ${size === "small" ? "text-2xl" : "text-4xl"}`}
         >
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
           }).format(amount)}
         </p>
-        {size === "large" && (
-          <div className="hidden sm:block">
-            <AddTransactionButton />
-          </div>
-        )}
+        {size == "large" && <AddTransactionButton />}
       </CardContent>
     </Card>
   );
