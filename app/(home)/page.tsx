@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
@@ -31,24 +30,27 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   return (
     <>
       <Navbar />
-      <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
-        <div className="flex justify-between items-center flex-wrap gap-4">
+      <div className="flex flex-col p-6 space-y-6">
+        {/* Título e Botões */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex items-center gap-3">
+          <div className="flex gap-3 items-center">
             <AiReportButton month={month} />
             <TimeSelect />
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr,1fr] gap-6 overflow-hidden">
-          <div className="flex flex-col gap-6 overflow-hidden">
-            <SummaryCards month={month} {...dashboard} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <TransactionsPieChart {...dashboard} />
-              <ExpensesPerCategory
-                expensesPerCategory={dashboard.totalExpensePerCategory}
-              />
-            </div>
+
+        {/* Seção de Cards e Gráficos */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <SummaryCards month={month} {...dashboard} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <TransactionsPieChart {...dashboard} />
+            <ExpensesPerCategory expensesPerCategory={dashboard.totalExpensePerCategory} />
           </div>
+        </div>
+
+        {/* Últimas Transações */}
+        <div className="overflow-hidden">
           <LastTransactions lastTransactions={dashboard.lastTransactions} />
         </div>
       </div>
