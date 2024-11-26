@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
@@ -30,9 +30,9 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col p-6 space-y-6">
-        {/* Título e Botões */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
+        {/* Cabeçalho */}
+        <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-6 items-center">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex gap-3 items-center">
             <AiReportButton month={month} />
@@ -40,18 +40,20 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
           </div>
         </div>
 
-        {/* Seção de Cards e Gráficos */}
+        {/* Grid de Cards e Gráficos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <SummaryCards month={month} {...dashboard} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <TransactionsPieChart {...dashboard} />
-            <ExpensesPerCategory expensesPerCategory={dashboard.totalExpensePerCategory} />
+          <div className="flex flex-col gap-6">
+            <SummaryCards month={month} {...dashboard} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <TransactionsPieChart {...dashboard} />
+              <ExpensesPerCategory expensesPerCategory={dashboard.totalExpensePerCategory} />
+            </div>
           </div>
-        </div>
 
-        {/* Últimas Transações */}
-        <div className="overflow-hidden">
-          <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          {/* Últimas Transações */}
+          <div className="overflow-hidden">
+            <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          </div>
         </div>
       </div>
     </>
