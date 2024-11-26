@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/_lib/prisma";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import OpenAI from "openai";
 import { GenerateAiReportSchema, generateAiReportSchema } from "./schema";
 
