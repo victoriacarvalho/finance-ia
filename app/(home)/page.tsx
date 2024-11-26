@@ -28,34 +28,28 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   }
   const dashboard = await getDashboard(month);
   const user = await (await clerkClient()).users.getUser(userId);
-
   return (
     <>
       <Navbar />
       <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
-        {/* Cabeçalho */}
-        <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-6 items-center">
+        <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex gap-3 items-center">
+          <div className="flex items-center gap-3">
             <AiReportButton month={month} />
             <TimeSelect />
           </div>
         </div>
-
-        {/* Grid de Cards e Gráficos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-6">
+        <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
+          <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards month={month} {...dashboard} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionsPieChart {...dashboard} />
-              <ExpensesPerCategory expensesPerCategory={dashboard.totalExpensePerCategory} />
+              <ExpensesPerCategory
+                expensesPerCategory={dashboard.totalExpensePerCategory}
+              />
             </div>
           </div>
-
-          {/* Últimas Transações */}
-          <div className="overflow-hidden sm:col-span-1 lg:col-span-1">
-            <LastTransactions lastTransactions={dashboard.lastTransactions} />
-          </div>
+          <LastTransactions lastTransactions={dashboard.lastTransactions} />
         </div>
       </div>
     </>
