@@ -14,7 +14,6 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
   if (!userId) {
     throw new Error("Unauthorized");
   }
-  const user = await clerkClient().users.getUser(userId);
  
   if (!process.env.OPENAI_API_KEY) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
