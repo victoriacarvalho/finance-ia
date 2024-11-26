@@ -28,6 +28,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   }
   const dashboard = await getDashboard(month);
   const user = await (await clerkClient()).users.getUser(userId);
+
   return (
     <>
       <Navbar />
@@ -52,7 +53,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
           </div>
 
           {/* Últimas Transações */}
-          <div className="overflow-hidden">
+          <div className="overflow-hidden sm:col-span-1 lg:col-span-1">
             <LastTransactions lastTransactions={dashboard.lastTransactions} />
           </div>
         </div>
