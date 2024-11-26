@@ -50,7 +50,7 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
   // Enviar para a API do OpenAI para gerar o relatório
   try {
     const completion = await openAi.chat.completions.create({
-      model: "gpt-4o",  // ou "gpt-3.5-turbo" para maior compatibilidade
+      model: "gpt-4o-mini",  // ou "gpt-3.5-turbo" para maior compatibilidade
       messages: [
         {
           role: "system",
