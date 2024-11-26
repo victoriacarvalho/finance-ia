@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "./_components/time-select";
-import { isMatch } from "date-fns";
+import { isMatch, format } from "date-fns";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
@@ -22,12 +22,16 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   if (!userId) {
     redirect("/login");
   }
+
+  // Garantir que o mês tenha dois dígitos
   const monthIsInvalid = !month || !isMatch(month, "MM");
   if (monthIsInvalid) {
-    redirect(`?month=${new Date().getMonth() + 1}`);
+    redirect(`?month=${format(new Date(), "MM")}`); // Formata o mês atual para MM
   }
+
   const dashboard = await getDashboard(month);
   const user = await (await clerkClient()).users.getUser(userId);
+  
   return (
     <>
       <Navbar />
