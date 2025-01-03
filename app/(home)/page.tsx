@@ -33,7 +33,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   }
 
   const dashboard = await getDashboard(month);
-  const user = await clerkClient.users.getUser(userId);
+const user = await (await clerkClient()).users.getUser(userId);
 
   return (
     <>
