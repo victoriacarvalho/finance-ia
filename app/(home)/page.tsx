@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
@@ -13,25 +12,33 @@ import AiReportButton from "./_components/ai-report-button";
 
 interface HomeProps {
   searchParams: {
-    month: string;
+    month: string; // Formato esperado: "MM"
+    year: string;  // Formato esperado: "YYYY"
   };
 }
 
-const Home = async ({ searchParams: { month } }: HomeProps) => {
+const Home = async ({ searchParams: { month, year } }: HomeProps) => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
   }
 
-  // Garantir que o mês tenha dois dígitos
-  const monthIsInvalid = !month || !isMatch(month, "MM");
-  if (monthIsInvalid) {
-    redirect(`?month=${format(new Date(), "MM")}`); // Formata o mês atual para MM
+  const currentYear = format(new Date(), "yyyy");
+  const currentMonth = format(new Date(), "MM");
+
+  // Verifica se o ano e mês são válidos
+  const yearIsValid = year && !isNaN(Number(year));
+  const monthIsValid = month && !isNaN(Number(month)) && isMatch(`${year}-${month}`, "yyyy-MM");
+
+  // Se a data for inválida ou não estiver presente, redireciona para o mês/ano atual
+  if (!monthIsValid || !yearIsValid || Number(year) > currentYear || (Number(year) === Number(currentYear) && Number(month) > Number(currentMonth))) {
+    redirect(`?month=${currentMonth}&year=${currentYear}`);
   }
 
-  const dashboard = await getDashboard(month);
+  // Chama a função que pega os dados, agora com base no mês e ano
+  const dashboard = await getDashboard(month, year);
   const user = await (await clerkClient()).users.getUser(userId);
-  
+
   return (
     <>
       <Navbar />
@@ -39,13 +46,12 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex items-center gap-3">
-            <AiReportButton month={month} />
             <TimeSelect />
           </div>
         </div>
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
-            <SummaryCards month={month} {...dashboard} />
+            <SummaryCards month={month} year={year} {...dashboard} />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionsPieChart {...dashboard} />
               <ExpensesPerCategory
