@@ -3,20 +3,24 @@ import { TransactionType } from "@prisma/client";
 import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { auth } from "@clerk/nextjs/server";
 
-export const getDashboard = async (month: string) => {
+export const getDashboard = async (month: string, userSelectedYear: number, userSelectedMonth: string) => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  const year = new Date().getFullYear();
+  // Atribui o ano escolhido (2024 ou 2025) ou usa 2024 por padrão
+  const year = userSelectedYear === 2024 || userSelectedYear === 2025 ? userSelectedYear : 2024;
+
+  // Construção do filtro para a data baseado no mês e ano selecionados
   const where = {
-  userId,
-  date: {
-    gte: new Date(`${year}-${month}-01`), // Data de início do mês para o ano informado
-    lt: new Date(`${Number(year) === 2025 ? 2025 : 2024}-${month}-31`), // Final do mês de 2024 ou 2025
-  },
-};
+    userId,
+    date: {
+      gte: new Date(`${year}-${userSelectedMonth}-01`), // Data de início do mês para o ano escolhido
+      lt: new Date(`${year}-${userSelectedMonth}-31`), // Final do mês para o ano escolhido
+    },
+  };
+
   const depositsTotal = Number(
     (
       await db.transaction.aggregate({
@@ -84,6 +88,7 @@ export const getDashboard = async (month: string) => {
     orderBy: { date: "desc" },
     take: 15,
   });
+
   return {
     balance,
     depositsTotal,
