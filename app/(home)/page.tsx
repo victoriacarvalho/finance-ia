@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "./_components/time-select";
-import { isMatch, format, parse } from "date-fns";
+import { isMatch, format } from "date-fns";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
@@ -13,7 +13,7 @@ import AiReportButton from "./_components/ai-report-button";
 
 interface HomeProps {
   searchParams: {
-    month: string; // Formato esperado: "YYYY-MM"
+    month: string;
   };
 }
 
@@ -23,22 +23,16 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
     redirect("/login");
   }
 
-  // Mês e ano atual
-  const currentYearMonth = format(new Date(), "yyyy-MM"); // Formato 'YYYY-MM'
-  
-  // Verifica se o mês tem o formato correto (YYYY-MM) e se é uma data válida
-  const monthIsInvalid =
-    !month || !isMatch(month, "yyyy-MM") || isNaN(new Date(month).getTime());
-
-  // Se o mês for inválido, redireciona para o mês atual
-  if (monthIsInvalid || month !== currentYearMonth) {
-    redirect(`?month=${currentYearMonth}`);
+  // Garantir que o mês tenha dois dígitos
+  const monthIsInvalid = !month || !isMatch(month, "MM");
+  if (monthIsInvalid) {
+    redirect(?month=${format(new Date(), "MM")}); // Formata o mês atual para MM
   }
 
   const dashboard = await getDashboard(month);
   const user = await (await clerkClient()).users.getUser(userId);
 
-  return (
+  return ( 
     <>
       <Navbar />
       <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
