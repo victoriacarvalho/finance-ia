@@ -8,13 +8,16 @@ export const getDashboard = async (month: string) => {
   if (!userId) {
     throw new Error("Unauthorized");
   }
-  const where = {
-  userId,
-  date: {
-    gte: new Date(`${year}-${month}-01`),  // Data de início do mês para o ano atual
-    lt: new Date(`${Number(year) + 1}-${month}-01`), // Início do próximo mês, que pode ser no ano seguinte
-  },
-};
+ const where = {
+    userId,
+    date: {
+       gte: new Date(2024-${month}-01) ||  gte: new Date(2025-${month}-01),
+     lt: new Date(2024-${month}-31) || lt: new Date(2025-${month}-31),
+     
+      
+    },
+  };
+
 
   const depositsTotal = Number(
     (
