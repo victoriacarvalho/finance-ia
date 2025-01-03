@@ -3,18 +3,25 @@ import { TransactionType } from "@prisma/client";
 import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { auth } from "@clerk/nextjs/server";
 
-export const getDashboard = async (month: string) => {
+export const getDashboard = async (month: string, year: string) => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
+
+  // Cálculo da última data do mês
+  const lastDayOfMonth = new Date(year, Number(month), 0); // Isso dá o último dia do mês
+  const firstDayOfMonth = new Date(year, Number(month) - 1, 1); // Isso dá o primeiro dia do mês
+
   const where = {
     userId,
     date: {
-      gte: new Date(`2024-${month}-01`),
-      lt: new Date(`2024-${month}-31`),
+      gte: firstDayOfMonth,
+      lt: lastDayOfMonth,
     },
   };
+
+  // Somatórios para diferentes tipos de transações
   const depositsTotal = Number(
     (
       await db.transaction.aggregate({
@@ -39,7 +46,11 @@ export const getDashboard = async (month: string) => {
       })
     )?._sum?.amount,
   );
+
+  // Calculo do saldo
   const balance = depositsTotal - investmentsTotal - expensesTotal;
+
+  // Somatório total de transações
   const transactionsTotal = Number(
     (
       await db.transaction.aggregate({
@@ -48,6 +59,8 @@ export const getDashboard = async (month: string) => {
       })
     )._sum.amount,
   );
+
+  // Porcentagem por tipo de transação
   const typesPercentage: TransactionPercentagePerType = {
     [TransactionType.DEPOSIT]: Math.round(
       (Number(depositsTotal || 0) / Number(transactionsTotal)) * 100,
@@ -59,6 +72,8 @@ export const getDashboard = async (month: string) => {
       (Number(investmentsTotal || 0) / Number(transactionsTotal)) * 100,
     ),
   };
+
+  // Somatório de despesas por categoria
   const totalExpensePerCategory: TotalExpensePerCategory[] = (
     await db.transaction.groupBy({
       by: ["category"],
@@ -77,11 +92,14 @@ export const getDashboard = async (month: string) => {
       (Number(category._sum.amount) / Number(expensesTotal)) * 100,
     ),
   }));
+
+  // Últimas transações
   const lastTransactions = await db.transaction.findMany({
     where,
     orderBy: { date: "desc" },
     take: 15,
   });
+
   return {
     balance,
     depositsTotal,
