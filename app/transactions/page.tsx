@@ -5,7 +5,7 @@ import AddTransactionButton from "../_components/add-transaction-buton";
 import Navbar from "../_components/navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import TimeSelect from "./_components/time-select";
+import TimeSelect from "../home/_components/time-select";
 
 const TransactionsPage = async () => {
   const { userId } = await auth();
