@@ -9,15 +9,15 @@ import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
+import AiReportButton from "./_components/ai-report-button";
 
 interface HomeProps {
   searchParams: {
     month: string;
-    year: string; // Adicionado para ano
   };
 }
 
-const Home = async ({ searchParams: { month, year } }: HomeProps) => {
+const Home = async ({ searchParams: { month } }: HomeProps) => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
@@ -26,18 +26,10 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
   // Garantir que o mês tenha dois dígitos
   const monthIsInvalid = !month || !isMatch(month, "MM");
   if (monthIsInvalid) {
-    redirect(`?month=${format(new Date(), "MM")}&year=${format(new Date(), "yyyy")}`); // Formata mês e ano atuais
+    redirect(`?month=${format(new Date(), "MM")}`); // Formata o mês atual para MM
   }
 
-  // Garantir que o ano tenha 4 dígitos
-  const yearIsInvalid = !year || !isMatch(year, "yyyy");
-  if (yearIsInvalid) {
-    redirect(`?month=${format(new Date(), "MM")}&year=${format(new Date(), "yyyy")}`); // Formata ano atual
-  }
-
-  // Passar o mês e ano dinâmicos para o getDashboard
-  const dashboard = await getDashboard(month, year);
-
+  const dashboard = await getDashboard(month);
   const user = await (await clerkClient()).users.getUser(userId);
   
   return (
