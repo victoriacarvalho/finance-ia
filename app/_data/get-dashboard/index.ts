@@ -14,13 +14,14 @@ const lastDayOfMonth = new Date(Number(year), Number(month) - 1, 0); // Isso dá
 const firstDayOfMonth = new Date(Number(year), Number(month) - 1, 1); // Isso dá o primeiro dia do mês
 
 
-  const where = {
-    userId,
-    date: {
-      gte: firstDayOfMonth,
-      lt: lastDayOfMonth,
-    },
-  };
+ const where = {
+  userId,
+  date: {
+    gte: new Date(Number(year), Number(month) - 1, 1), // primeiro dia do mês
+    lt: new Date(Number(year), Number(month), 0), // último dia do mês
+  },
+};
+
 
   // Somatórios para diferentes tipos de transações
   const depositsTotal = Number(
