@@ -13,10 +13,11 @@ import LastTransactions from "./_components/last-transactions";
 interface HomeProps {
   searchParams: {
     month: string;
+    year: string; // Adicionado para ano
   };
 }
 
-const Home = async ({ searchParams: { month } }: HomeProps) => {
+const Home = async ({ searchParams: { month, year } }: HomeProps) => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
@@ -25,10 +26,18 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   // Garantir que o mês tenha dois dígitos
   const monthIsInvalid = !month || !isMatch(month, "MM");
   if (monthIsInvalid) {
-    redirect(`?month=${format(new Date(), "MM")}`); // Formata o mês atual para MM
+    redirect(`?month=${format(new Date(), "MM")}&year=${format(new Date(), "yyyy")}`); // Formata mês e ano atuais
   }
 
-  const dashboard = await getDashboard(month);
+  // Garantir que o ano tenha 4 dígitos
+  const yearIsInvalid = !year || !isMatch(year, "yyyy");
+  if (yearIsInvalid) {
+    redirect(`?month=${format(new Date(), "MM")}&year=${format(new Date(), "yyyy")}`); // Formata ano atual
+  }
+
+  // Passar o mês e ano dinâmicos para o getDashboard
+  const dashboard = await getDashboard(month, year);
+
   const user = await (await clerkClient()).users.getUser(userId);
   
   return (
