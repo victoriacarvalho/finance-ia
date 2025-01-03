@@ -9,7 +9,6 @@ import {
 } from "@/app/_components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
 
-// Opções de mês
 const MONTH_OPTIONS = [
   { value: "01", label: "Janeiro" },
   { value: "02", label: "Fevereiro" },
@@ -25,7 +24,6 @@ const MONTH_OPTIONS = [
   { value: "12", label: "Dezembro" },
 ];
 
-// Opções de ano (você pode personalizar isso conforme necessário)
 const YEAR_OPTIONS = [
   { value: "2023", label: "2023" },
   { value: "2024", label: "2024" },
