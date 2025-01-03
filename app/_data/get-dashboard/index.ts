@@ -9,69 +9,53 @@ export const getDashboard = async (month: string, year: string) => {
     throw new Error("Unauthorized");
   }
 
-  // Cálculo da última data do mês
-const lastDayOfMonth = new Date(Number(year), Number(month) - 1, 0); // Isso dá o último dia do mês
-const firstDayOfMonth = new Date(Number(year), Number(month) - 1, 1); // Isso dá o primeiro dia do mês
+  // Cálculo da última e primeira data do mês
+  const lastDayOfMonth = new Date(Number(year), Number(month), 0); // Último dia do mês
+  const firstDayOfMonth = new Date(Number(year), Number(month) - 1, 1); // Primeiro dia do mês
 
-
- const where = {
-  userId,
-  date: {
-    gte: new Date(Number(year), Number(month) - 1, 1), // primeiro dia do mês
-    lt: new Date(Number(year), Number(month), 0), // último dia do mês
-  },
-};
-
+  const where = {
+    userId,
+    date: {
+      gte: firstDayOfMonth,  // primeiro dia do mês
+      lt: new Date(Number(year), Number(month), 0), // último dia do mês
+    },
+  };
 
   // Somatórios para diferentes tipos de transações
-  const depositsTotal = Number(
-    (
-      await db.transaction.aggregate({
-        where: { ...where, type: "DEPOSIT" },
-        _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
-  const investmentsTotal = Number(
-    (
-      await db.transaction.aggregate({
-        where: { ...where, type: "INVESTMENT" },
-        _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
-  const expensesTotal = Number(
-    (
-      await db.transaction.aggregate({
-        where: { ...where, type: "EXPENSE" },
-        _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
+  const depositsTotal = await db.transaction.aggregate({
+    where: { ...where, type: "DEPOSIT" },
+    _sum: { amount: true },
+  }).then(result => result._sum?.amount ?? 0);
+
+  const investmentsTotal = await db.transaction.aggregate({
+    where: { ...where, type: "INVESTMENT" },
+    _sum: { amount: true },
+  }).then(result => result._sum?.amount ?? 0);
+
+  const expensesTotal = await db.transaction.aggregate({
+    where: { ...where, type: "EXPENSE" },
+    _sum: { amount: true },
+  }).then(result => result._sum?.amount ?? 0);
 
   // Calculo do saldo
   const balance = depositsTotal - investmentsTotal - expensesTotal;
 
   // Somatório total de transações
-  const transactionsTotal = Number(
-    (
-      await db.transaction.aggregate({
-        where,
-        _sum: { amount: true },
-      })
-    )._sum.amount,
-  );
+  const transactionsTotal = await db.transaction.aggregate({
+    where,
+    _sum: { amount: true },
+  }).then(result => result._sum.amount ?? 0);
 
   // Porcentagem por tipo de transação
   const typesPercentage: TransactionPercentagePerType = {
     [TransactionType.DEPOSIT]: Math.round(
-      (Number(depositsTotal || 0) / Number(transactionsTotal)) * 100,
+      (depositsTotal / transactionsTotal) * 100
     ),
     [TransactionType.EXPENSE]: Math.round(
-      (Number(expensesTotal || 0) / Number(transactionsTotal)) * 100,
+      (expensesTotal / transactionsTotal) * 100
     ),
     [TransactionType.INVESTMENT]: Math.round(
-      (Number(investmentsTotal || 0) / Number(transactionsTotal)) * 100,
+      (investmentsTotal / transactionsTotal) * 100
     ),
   };
 
@@ -89,9 +73,9 @@ const firstDayOfMonth = new Date(Number(year), Number(month) - 1, 1); // Isso d�
     })
   ).map((category) => ({
     category: category.category,
-    totalAmount: Number(category._sum.amount),
+    totalAmount: category._sum.amount ?? 0,
     percentageOfTotal: Math.round(
-      (Number(category._sum.amount) / Number(expensesTotal)) * 100,
+      (category._sum.amount / expensesTotal) * 100
     ),
   }));
 
