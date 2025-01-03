@@ -8,7 +8,6 @@ import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
-import AiReportButton from "./_components/ai-report-button";
 
 interface HomeProps {
   searchParams: {
@@ -37,7 +36,6 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
 
   // Chama a função que pega os dados, agora com base no mês e ano
   const dashboard = await getDashboard(month, year);
-  const user = await (await clerkClient()).users.getUser(userId);
 
   return (
     <>
