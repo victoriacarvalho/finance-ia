@@ -9,10 +9,11 @@ import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
+import AiReportButton from "./_components/ai-report-button";
 
 interface HomeProps {
   searchParams: {
-    month: string;
+    month: string; // Formato esperado: "YYYY-MM"
   };
 }
 
@@ -22,15 +23,18 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
     redirect("/login");
   }
 
-  // Garantir que o mês tenha dois dígitos
-  const monthIsInvalid = !month || !isMatch(month, "MM");
-  if (monthIsInvalid) {
-    redirect(`?month=${format(new Date(), "MM")}`); // Formata o mês atual para MM
+  // Formato esperado: YYYY-MM
+  const currentYearMonth = format(new Date(), "yyyy-MM"); // Ano e mês atual
+  const monthIsInvalid =
+    !month || !isMatch(month, "yyyy-MM") || isNaN(new Date(month).getTime());
+
+  if (monthIsInvalid && month !== currentYearMonth) {
+    redirect(`?month=${currentYearMonth}`); // Redireciona para o ano e mês atual
   }
 
   const dashboard = await getDashboard(month);
-  const user = await (await clerkClient()).users.getUser(userId);
-  
+  const user = await clerkClient.users.getUser(userId);
+
   return (
     <>
       <Navbar />
