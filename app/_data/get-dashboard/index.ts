@@ -10,8 +10,9 @@ export const getDashboard = async (month: string, year: string) => {
   }
 
   // Cálculo da última data do mês
-  const lastDayOfMonth = new Date(year, Number(month), 0); // Isso dá o último dia do mês
-  const firstDayOfMonth = new Date(year, Number(month) - 1, 1); // Isso dá o primeiro dia do mês
+const lastDayOfMonth = new Date(Number(year), Number(month) - 1, 0); // Isso dá o último dia do mês
+const firstDayOfMonth = new Date(Number(year), Number(month) - 1, 1); // Isso dá o primeiro dia do mês
+
 
   const where = {
     userId,
