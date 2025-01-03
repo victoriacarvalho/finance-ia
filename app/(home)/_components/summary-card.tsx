@@ -1,4 +1,4 @@
-import AddTransactionButton from "@/app/_components/add-transaction-button";
+import AddTransactionButton from './add-transaction-button';
 import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
 import { ReactNode } from "react";
 
