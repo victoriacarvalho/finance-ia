@@ -1,4 +1,5 @@
-import { auth} from "@clerk/nextjs/server";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
@@ -8,34 +9,31 @@ import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
+import AiReportButton from "./_components/ai-report-button";
 
 interface HomeProps {
   searchParams: {
-    month: string; // Formato esperado: "MM"
-    year: string;  // Formato esperado: "YYYY"
+    month: string; // Formato esperado: "YYYY-MM"
   };
 }
 
-const Home = async ({ searchParams: { month, year } }: HomeProps) => {
+const Home = async ({ searchParams: { month } }: HomeProps) => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
   }
 
-  const currentYear = format(new Date(), "yyyy");
-  const currentMonth = format(new Date(), "MM");
+  // Formato esperado: YYYY-MM
+  const currentYearMonth = format(new Date(), "yyyy-MM"); // Ano e mês atual
+  const monthIsInvalid =
+    !month || !isMatch(month, "yyyy-MM") || isNaN(new Date(month).getTime());
 
-  // Verifica se o ano e mês são válidos
-  const yearIsValid = year && !isNaN(Number(year));
-  const monthIsValid = month && !isNaN(Number(month)) && isMatch(`${year}-${month}`, "yyyy-MM");
-
-  // Se a data for inválida ou não estiver presente, redireciona para o mês/ano atual
-  if (!monthIsValid || !yearIsValid || Number(year) > currentYear || (Number(year) === Number(currentYear) && Number(month) > Number(currentMonth))) {
-    redirect(`?month=${currentMonth}&year=${currentYear}`);
+  if (monthIsInvalid && month !== currentYearMonth) {
+    redirect(`?month=${currentYearMonth}`); // Redireciona para o ano e mês atual
   }
 
-  // Chama a função que pega os dados, agora com base no mês e ano
-  const dashboard = await getDashboard(month, year);
+  const dashboard = await getDashboard(month);
+const user = await (await clerkClient()).users.getUser(userId);
 
   return (
     <>
@@ -49,7 +47,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
         </div>
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
-            <SummaryCards month={month} year={year} {...dashboard} />
+            <SummaryCards month={month} {...dashboard} />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionsPieChart {...dashboard} />
               <ExpensesPerCategory
