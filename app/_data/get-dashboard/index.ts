@@ -8,6 +8,8 @@ export const getDashboard = async (month: string) => {
   if (!userId) {
     throw new Error("Unauthorized");
   }
+
+  const year = new Date().getFullYear();
   const where = {
   userId,
   date: {
