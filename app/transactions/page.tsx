@@ -24,7 +24,6 @@ const TransactionsPage = async () => {
       <div className="space-y-6 p-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <h1 className="text-2xl font-bold">Transações</h1>
-           <TimeSelect />
           <AddTransactionButton />
         </div>
         <div className="overflow-x-auto">
