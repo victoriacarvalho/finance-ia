@@ -2,8 +2,6 @@
 
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/app/_components/ui/select";
@@ -24,53 +22,44 @@ const MONTH_OPTIONS = [
   { value: "12", label: "Dezembro" },
 ];
 
-const getCurrentYear = () => new Date().getFullYear();
-const CURRENT_YEAR = getCurrentYear();
-
-const YEAR_OPTIONS = [{ value: CURRENT_YEAR.toString(), label: CURRENT_YEAR.toString() }];
+const CURRENT_YEAR = new Date().getFullYear().toString();
 
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const month = searchParams.get("month");
-  const year = CURRENT_YEAR.toString();
 
-  const handleChange = (value: string, type: "month" | "year") => {
+  const handleChange = (value: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
-    if (type === "month") {
-      newParams.set("month", value);
-    } else {
-      newParams.set("year", value);
-    }
+    newParams.set("month", value);
+    newParams.set("year", CURRENT_YEAR);
     push(`/?${newParams.toString()}`);
   };
 
   return (
     <div className="flex space-x-4">
       <Select
-        onValueChange={(value) => handleChange(value, "month")}
+        onValueChange={handleChange}
         defaultValue={month ?? ""}
       >
         <SelectTrigger className="w-[150px] rounded-full">
           <SelectValue placeholder="Mês" />
         </SelectTrigger>
-        <SelectContent>
+        <div className="absolute bg-white shadow-md rounded-md mt-1 w-full">
           {MONTH_OPTIONS.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <div
+              key={option.value}
+              className="p-2 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleChange(option.value)}
+            >
               {option.label}
-            </SelectItem>
+            </div>
           ))}
-        </SelectContent>
+        </div>
       </Select>
-
-      <Select disabled defaultValue={year}>
-        <SelectTrigger className="w-[100px] rounded-full">
-          <SelectValue placeholder="Ano" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={year}>{year}</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="w-[100px] text-center py-2 border rounded-full bg-gray-100 text-gray-600">
+        {CURRENT_YEAR}
+      </div>
     </div>
   );
 };
