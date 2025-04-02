@@ -24,18 +24,19 @@ const MONTH_OPTIONS = [
   { value: "12", label: "Dezembro" },
 ];
 
-const YEAR_OPTIONS = [
-  { value: "2023", label: "2023" },
-  { value: "2024", label: "2024" },
-  { value: "2025", label: "2025" },
-  // Adicione mais anos conforme necessário
-];
+const getCurrentYear = () => new Date().getFullYear();
+
+const YEAR_OPTIONS = Array.from({ length: 10 }, (_, i) => {
+  const year = getCurrentYear() + i;
+  return { value: year.toString(), label: year.toString() };
+});
 
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const month = searchParams.get("month");
-  const year = searchParams.get("year") ?? new Date().getFullYear().toString(); // Se o ano não for fornecido, usa o ano atual
+  const currentYear = getCurrentYear();
+  const year = searchParams.get("year") ?? currentYear.toString();
 
   const handleChange = (value: string, type: "month" | "year") => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -44,7 +45,7 @@ const TimeSelect = () => {
     } else {
       newParams.set("year", value);
     }
-    push(`/?${newParams.toString()}`); // Atualiza os parâmetros da URL com mês e ano
+    push(`/?${newParams.toString()}`);
   };
 
   return (
