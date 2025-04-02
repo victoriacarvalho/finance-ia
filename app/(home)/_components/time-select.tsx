@@ -25,18 +25,15 @@ const MONTH_OPTIONS = [
 ];
 
 const getCurrentYear = () => new Date().getFullYear();
+const CURRENT_YEAR = getCurrentYear();
 
-const YEAR_OPTIONS = Array.from({ length: 10 }, (_, i) => {
-  const year = getCurrentYear() + i;
-  return { value: year.toString(), label: year.toString() };
-});
+const YEAR_OPTIONS = [{ value: CURRENT_YEAR.toString(), label: CURRENT_YEAR.toString() }];
 
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const month = searchParams.get("month");
-  const currentYear = getCurrentYear();
-  const year = searchParams.get("year") ?? currentYear.toString();
+  const year = CURRENT_YEAR.toString();
 
   const handleChange = (value: string, type: "month" | "year") => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -66,19 +63,12 @@ const TimeSelect = () => {
         </SelectContent>
       </Select>
 
-      <Select
-        onValueChange={(value) => handleChange(value, "year")}
-        defaultValue={year}
-      >
+      <Select disabled defaultValue={year}>
         <SelectTrigger className="w-[100px] rounded-full">
           <SelectValue placeholder="Ano" />
         </SelectTrigger>
         <SelectContent>
-          {YEAR_OPTIONS.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
+          <SelectItem value={year}>{year}</SelectItem>
         </SelectContent>
       </Select>
     </div>
