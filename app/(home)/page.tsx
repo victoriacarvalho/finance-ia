@@ -9,7 +9,7 @@ import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
-import AiReportButton from "./_components/ai-report-button";
+
 
 interface HomeProps {
   searchParams: {
