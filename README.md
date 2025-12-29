@@ -1,4 +1,3 @@
-
 # 💰 FinanceIA
 
 ![Status](https://img.shields.io/badge/STATUS-CONCLUÍDO-brightgreen?style=for-the-badge)
@@ -11,6 +10,7 @@
 O **FinanceIA** é uma plataforma inteligente de gestão financeira pessoal (SaaS), desenvolvida para simplificar o controlo de despesas, receitas e investimentos. Utilizando a mais moderna stack do ecossistema React, o sistema oferece dashboards interativos, relatórios detalhados e insights financeiros em tempo real.
 
 ---
+
 
 ## 🚀 Funcionalidades Principais
 
@@ -25,7 +25,7 @@ O **FinanceIA** é uma plataforma inteligente de gestão financeira pessoal (Saa
 * **CRUD Completo:** Adicionar, editar e remover transações de forma intuitiva.
 * **Categorização Detalhada:**
     * *Tipos:* Depósito, Despesa, Investimento.
-    * *Categorias:* Moradia (Luz, Água, Aluguer), Alimentação, Transporte, Lazer, Saúde, Educação, Viagens, etc.
+    * *Categorias:* Moradia, Alimentação, Transporte, Lazer, Saúde, Educação, etc..
     * *Métodos de Pagamento:* Cartão de Crédito/Débito, Pix, Boleto, Dinheiro, Transferência.
 * **Validação de Dados:** Formulários seguros com validação em tempo real utilizando *Zod* e *React Hook Form*.
 
@@ -89,9 +89,6 @@ DATABASE_URL="postgresql://user:password@host:port/database?sslmode=require"
 # Autenticação (Clerk)
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
-
-# Inteligência Artificial (Opcional)
-OPENAI_API_KEY=sk-...
 
 ```
 
@@ -161,7 +158,3 @@ Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](https://www.
 ## 👩‍💻 Autora
 
 Desenvolvido com 💜 por **Victória Carvalho**
-
-```
-
-```
