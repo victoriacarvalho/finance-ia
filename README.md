@@ -8,14 +8,6 @@ O **FinanceIA** é uma plataforma moderna de gestão financeira pessoal, desenvo
 
 ---
 
-## 📸 Screenshots
-
-| Dashboard Inicial | Gestão de Transações |
-|:---:|:---:|
-| ![Dashboard](https://via.placeholder.com/600x350?text=Dashboard+Preview) | ![Transações](https://via.placeholder.com/600x350?text=Transactions+Page) |
-> *Nota: Substitua os links acima por imagens reais do projeto ou guarde-as na pasta `.github/assets`.*
-
----
 
 ## 🚀 Funcionalidades
 
